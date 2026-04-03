@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Search, MapPin, Clock, Star, Filter, X, ChefHat, Navigation, Loader2 } from 'lucide-react';
 import MenuCard from '../components/MenuCard';
 import CategoryFilter from '../components/CategoryFilter';
+import { MenuGridSkeleton } from '../components/Skeletons';
 import { CooksMap, LocationPicker } from '../components/map';
 import { cooksAPI, menuAPI } from '../services/api';
 import { setItems } from '../store/menuSlice';
+import toast from 'react-hot-toast';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -320,9 +322,8 @@ const Home = () => {
 
         {/* Loading */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="h-10 w-10 text-orange-500 animate-spin mb-4" />
-            <p className="text-gray-500">Finding home cooks near you...</p>
+          <div className="animate-fade-in">
+            <MenuGridSkeleton count={8} />
           </div>
         ) : (
           <>

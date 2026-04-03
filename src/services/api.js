@@ -1,4 +1,5 @@
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
@@ -26,12 +27,43 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+    // Network error (no response)
+    if (!error.response) {
+      toast.error('Network error. Please check your connection.');
+      return Promise.reject({ message: 'Network error' });
     }
-    return Promise.reject(error.response?.data || error);
+
+    const { status, data } = error.response;
+
+    switch (status) {
+      case 401:
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        toast.error('Session expired. Please login again.');
+        window.location.href = '/login';
+        break;
+      case 403:
+        toast.error('You do not have permission for this action.');
+        break;
+      case 404:
+        // Silently handle 404s (let components handle empty states)
+        break;
+      case 422:
+        toast.error(data?.message || 'Validation error. Please check your input.');
+        break;
+      case 429:
+        toast.error('Too many requests. Please try again later.');
+        break;
+      case 500:
+      case 502:
+      case 503:
+        toast.error('Server error. Please try again later.');
+        break;
+      default:
+        break;
+    }
+
+    return Promise.reject(data || error);
   }
 );
 
