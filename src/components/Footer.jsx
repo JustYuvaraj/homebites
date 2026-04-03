@@ -1,4 +1,4 @@
-import { ChefHat, Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -9,14 +9,14 @@ const Footer = () => {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <ChefHat className="h-8 w-8 text-orange-500" />
+              <span className="text-3xl">🍛</span>
               <span className="text-2xl font-bold text-white">
-                Home<span className="text-orange-500">Bites</span>
+                Veetu<span className="text-orange-500">Saapadu</span>
               </span>
             </div>
             <p className="text-gray-400 mb-4 max-w-md">
-              Authentic homemade food delivered to your doorstep. Made with love, 
-              served with care. Experience the taste of home-cooked meals.
+              வீட்டு சாப்பாடு - Authentic home-cooked Tamil food delivered to your doorstep. 
+              Made with love, served with care. Experience the taste of Amma's cooking.
             </p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-orange-500 transition-colors text-xl">📸</a>
@@ -65,7 +65,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} HomeBites. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} VeetuSaapadu. All rights reserved.</p>
         </div>
       </div>
     </footer>

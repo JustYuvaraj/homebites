@@ -7,22 +7,41 @@ const Landing = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="absolute top-0 left-0 right-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-3xl">🍛</span>
+            <span className="text-2xl font-bold text-gray-800">
+              Veetu<span className="text-orange-500">Saapadu</span>
+            </span>
+          </div>
+          <Link
+            to="/menu"
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          >
+            Order Now
+          </Link>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden pt-20">
         <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-red-50" />
         
         <div className="relative max-w-7xl mx-auto px-4 py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div>
+              <p className="text-orange-500 font-semibold mb-2">வீட்டு சாப்பாடு</p>
               <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                Homemade food,
-                <span className="text-orange-500"> delivered</span> to your door
+                Home cooked food,
+                <span className="text-orange-500"> delivered</span> fresh
               </h1>
               
               <p className="mt-6 text-xl text-gray-600 leading-relaxed">
-                Fresh, authentic home-cooked meals made with love. 
-                Support local home chefs and enjoy restaurant-quality food from the comfort of your home.
+                Authentic Tamil home-cooked meals made with love by local home chefs.
+                Taste the warmth of Amma's cooking delivered to your doorstep.
               </p>
 
               {/* Address Input */}

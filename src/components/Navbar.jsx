@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ShoppingCart, User, ChefHat } from 'lucide-react';
+import { ShoppingCart, User } from 'lucide-react';
 
 const Navbar = () => {
   const { totalItems } = useSelector((state) => state.cart);
@@ -11,9 +11,9 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <ChefHat className="h-8 w-8 text-orange-500" />
+            <span className="text-2xl">🍛</span>
             <span className="text-2xl font-bold text-gray-800">
-              Home<span className="text-orange-500">Bites</span>
+              Veetu<span className="text-orange-500">Saapadu</span>
             </span>
           </Link>
 
