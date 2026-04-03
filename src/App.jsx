@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
+// Auth Pages
+import Auth from './pages/Auth';
+
 // Customer Pages
 import Landing from './pages/Landing';
 import Home from './pages/Home';
@@ -28,6 +31,10 @@ function App() {
       <Routes>
         {/* Landing Page - No Navbar/Footer */}
         <Route path="/" element={<Landing />} />
+        
+        {/* Auth */}
+        <Route path="/login" element={<Auth />} />
+        <Route path="/register" element={<Auth />} />
 
         {/* Customer Routes - With Navbar/Footer */}
         <Route
