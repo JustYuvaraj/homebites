@@ -1,141 +1,205 @@
-# HomeBites - Home Cook Food Delivery Platform 🍳
+# VeetuSaapadu - Home Cook Food Delivery Platform 🍛
 
-A modern food delivery web application built with React, Redux Toolkit, and Tailwind CSS. This project demonstrates a complete e-commerce flow for a home-based food delivery service.
+A production-ready full-stack food delivery application connecting home cooks with customers. Built with React, Redux Toolkit, Tailwind CSS (Frontend) and Spring Boot, MySQL (Backend).
 
-## 🚀 Live Demo
-Run locally: `npm run dev` → http://localhost:5173
+## 🌟 Overview
+
+VeetuSaapadu (வீட்டு சாப்பாடு - "Home Food" in Tamil) is a Swiggy-like platform specifically designed for home cooks to sell their homemade food directly to customers.
+
+## 🚀 Live Repositories
+
+| Component | Repository |
+|-----------|------------|
+| **Frontend** | [veetusaapadu-frontend](https://github.com/JustYuvaraj/homebites) |
+| **Backend** | [veetusaapadu-backend](https://github.com/JustYuvaraj/veetusaapadu-backend) |
 
 ## ✨ Features
 
-### Customer Features
-- 🍽️ **Menu Browsing** - View all available dishes with images, descriptions, and prices
-- 🔍 **Search & Filter** - Find dishes by name, category, or veg/non-veg preference
-- 🛒 **Shopping Cart** - Add/remove items with quantity management (Redux)
-- 💳 **Checkout** - Complete order with delivery address and payment method
-- 📦 **Order Tracking** - Real-time order status updates
-- 📜 **Order History** - View all past orders
+### 👥 Customer Features
+- 🍽️ Browse menu with search, category filter, veg/non-veg toggle
+- 🛒 Shopping cart with quantity management
+- 📍 Multiple delivery addresses
+- 💳 Checkout with order placement
+- 📦 Real-time order tracking
+- 📜 Order history
 
-### Technical Highlights
-- **State Management**: Redux Toolkit with createSlice and createAsyncThunk
-- **Routing**: React Router v6 with protected routes
-- **Styling**: Tailwind CSS for responsive design
-- **Icons**: Lucide React for beautiful SVG icons
-- **Performance**: React hooks (useState, useEffect, useMemo, useSelector, useDispatch)
+### 👨‍🍳 Cook Features
+- 📋 Menu management (CRUD operations)
+- 🔔 Incoming order notifications
+- ✅ Accept/Reject orders
+- 🍳 Order status updates (Preparing → Ready)
+- 📊 Dashboard with earnings and stats
+
+### 🚗 Delivery Agent Features
+- 📦 View orders ready for pickup
+- ✅ Accept delivery assignments
+- 🏃 Mark orders as Picked Up / Delivered
+- 📜 Completed deliveries history
 
 ## 🛠️ Tech Stack
 
+### Frontend
 | Technology | Purpose |
 |------------|---------|
 | React 18 | UI Framework |
-| Redux Toolkit | State Management |
+| Redux Toolkit | State Management (createSlice, createAsyncThunk) |
 | React Router v6 | Client-side Routing |
 | Tailwind CSS | Styling |
+| Axios | HTTP Client |
 | Vite | Build Tool |
 | Lucide React | Icons |
+
+### Backend
+| Technology | Purpose |
+|------------|---------|
+| Java 17 | Programming Language |
+| Spring Boot 3.2 | REST API Framework |
+| Spring Security | JWT Authentication |
+| Spring Data JPA | ORM |
+| MySQL / H2 | Database |
+| Swagger/OpenAPI | API Documentation |
+| Lombok | Boilerplate Reduction |
 
 ## 📁 Project Structure
 
 ```
-homebites/
-├── src/
-│   ├── components/        # Reusable UI components
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── MenuCard.jsx
-│   │   ├── CartItem.jsx
-│   │   ├── CategoryFilter.jsx
-│   │   └── OrderCard.jsx
-│   ├── pages/             # Page components
-│   │   ├── Home.jsx
-│   │   ├── Cart.jsx
-│   │   ├── Checkout.jsx
-│   │   ├── OrderSuccess.jsx
-│   │   ├── Orders.jsx
-│   │   └── About.jsx
-│   ├── store/             # Redux store & slices
-│   │   ├── index.js
-│   │   ├── cartSlice.js
-│   │   ├── orderSlice.js
-│   │   └── authSlice.js
-│   ├── data/              # Mock data
-│   │   └── menuData.js
-│   ├── App.jsx
-│   └── main.jsx
-└── package.json
+veetusaapadu/
+├── frontend/ (React)
+│   ├── src/
+│   │   ├── components/       # Reusable UI components
+│   │   ├── pages/            # Page components
+│   │   │   ├── cook/         # Cook dashboard pages
+│   │   │   └── delivery/     # Delivery dashboard pages
+│   │   ├── store/            # Redux store & slices
+│   │   ├── services/         # API service layer
+│   │   └── data/             # Mock data
+│   └── package.json
+│
+└── backend/ (Spring Boot)
+    └── src/main/java/com/veetusaapadu/
+        ├── config/           # Security, CORS config
+        ├── controller/       # REST controllers
+        ├── dto/              # Request/Response DTOs
+        ├── entity/           # JPA entities
+        ├── exception/        # Custom exceptions
+        ├── repository/       # JPA repositories
+        ├── security/         # JWT components
+        └── service/          # Business logic
 ```
 
 ## 🏃‍♂️ Getting Started
 
+### Frontend
 ```bash
-# Clone the repository
-git clone https://github.com/JustYuvaraj/homebites.git
-
-# Navigate to project directory
 cd homebites
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Build for production
-npm run build
+# Open http://localhost:5173
 ```
 
-## 🎯 Key Implementation Details
-
-### Redux Store Configuration
-```javascript
-// Centralized store with multiple slices
-export const store = configureStore({
-  reducer: {
-    cart: cartReducer,
-    orders: orderReducer,
-    auth: authReducer,
-  },
-});
+### Backend
+```bash
+cd veetusaapadu-backend
+./mvnw spring-boot:run
+# API: http://localhost:8080
+# Swagger: http://localhost:8080/swagger-ui.html
 ```
 
-### Async Operations with createAsyncThunk
+### Test Credentials
+| Role | Email | Password |
+|------|-------|----------|
+| Cook | lakshmi@veetusaapadu.com | password123 |
+| Customer | rajesh@gmail.com | password123 |
+| Delivery | kumar@veetusaapadu.com | password123 |
+
+## 📊 Order Lifecycle
+
+```
+Customer places order
+        ↓
+    PENDING
+        ↓
+Cook accepts → ACCEPTED → PREPARING → READY
+        ↓
+   (or REJECTED)
+        ↓
+Delivery accepts → ASSIGNED → PICKED_UP → DELIVERED
+```
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register user
+- `POST /api/auth/login` - Login
+- `GET /api/auth/me` - Get current user
+
+### Menu (Public)
+- `GET /api/menu` - Browse all items
+- `GET /api/menu/search?query=` - Search items
+- `GET /api/menu/categories` - Get categories
+
+### Customer (Protected)
+- `POST /api/customer/orders` - Place order
+- `GET /api/customer/orders` - Order history
+- `POST /api/customer/addresses` - Add address
+
+### Cook (Protected)
+- `GET /api/cook/menu` - My menu items
+- `POST /api/cook/menu` - Add item
+- `POST /api/cook/orders/{id}/accept` - Accept order
+- `POST /api/cook/orders/{id}/ready` - Mark ready
+
+### Delivery (Protected)
+- `GET /api/delivery/orders/available` - Available pickups
+- `POST /api/delivery/orders/{id}/deliver` - Mark delivered
+
+## 🎯 Key Implementation Highlights
+
+### Redux Async Thunks
 ```javascript
-export const placeOrder = createAsyncThunk(
-  'orders/placeOrder',
-  async (orderData, { rejectWithValue }) => {
-    // Handles loading states automatically
+export const loginUser = createAsyncThunk(
+  'auth/login',
+  async (credentials, { rejectWithValue }) => {
+    const response = await authAPI.login(credentials);
+    localStorage.setItem('token', response.data.token);
+    return response.data;
   }
 );
 ```
 
-### Custom Hooks Pattern
-- Uses `useSelector` for reading state
-- Uses `useDispatch` for actions
-- Uses `useMemo` for computed/filtered data
+### JWT Authentication (Spring Security)
+```java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) {
+    http.csrf(csrf -> csrf.disable())
+        .sessionManagement(s -> s.sessionCreationPolicy(STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/cook/**").hasRole("COOK")
+            .anyRequest().authenticated()
+        );
+}
+```
+
+### Role-Based Access Control
+- **CUSTOMER** - Browse, order, track
+- **COOK** - Manage menu, handle orders
+- **DELIVERY** - Pickup and deliver orders
+- **ADMIN** - Full access
 
 ## 📱 Responsive Design
 
-The application is fully responsive and works on:
-- 📱 Mobile devices (320px+)
-- 📱 Tablets (768px+)
-- 💻 Desktops (1024px+)
-
-## 🔮 Future Enhancements
-
-- [ ] User authentication with JWT
-- [ ] Backend API integration
-- [ ] Payment gateway integration
-- [ ] Push notifications
-- [ ] Admin dashboard for cook
+- 📱 Mobile-first approach
+- 💻 Desktop-optimized dashboards
+- 🎨 DoorDash-inspired UI
 
 ## 👨‍💻 Author
 
 **Yuvaraj**
 - GitHub: [@JustYuvaraj](https://github.com/JustYuvaraj)
 
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ---
 
 Built with ❤️ for Juspay Frontend SDE Internship Application
+
+**Demonstrating:** React.js, Redux Toolkit, Hooks, RESTful APIs, Spring Boot, JWT Authentication
