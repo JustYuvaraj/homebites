@@ -1,4 +1,4 @@
-import { ChefHat, Phone, Mail, MapPin, Instagram, Facebook, Twitter } from 'lucide-react';
+import { ChefHat, Phone, Mail, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -19,15 +19,9 @@ const Footer = () => {
               served with care. Experience the taste of home-cooked meals.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-orange-500 transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-orange-500 transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="hover:text-orange-500 transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
+              <a href="#" className="hover:text-orange-500 transition-colors text-xl">📸</a>
+              <a href="#" className="hover:text-orange-500 transition-colors text-xl">📘</a>
+              <a href="#" className="hover:text-orange-500 transition-colors text-xl">🐦</a>
             </div>
           </div>
 

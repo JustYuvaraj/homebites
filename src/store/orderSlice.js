@@ -5,15 +5,18 @@ export const placeOrder = createAsyncThunk(
   'orders/placeOrder',
   async (orderData, { rejectWithValue }) => {
     try {
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const order = {
         id: `ORD${Date.now()}`,
         ...orderData,
-        status: 'confirmed',
+        status: 'pending',
+        cookStatus: 'pending', // pending, accepted, rejected, preparing, ready
+        deliveryStatus: 'unassigned', // unassigned, assigned, picked, delivered
+        deliveryAgent: null,
         createdAt: new Date().toISOString(),
-        estimatedDelivery: new Date(Date.now() + 45 * 60000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        estimatedDelivery: null,
       };
       
       return order;
@@ -34,11 +37,75 @@ const orderSlice = createSlice({
   name: 'orders',
   initialState,
   reducers: {
+    // Cook actions
+    acceptOrder: (state, action) => {
+      const order = state.orders.find(o => o.id === action.payload);
+      if (order) {
+        order.cookStatus = 'accepted';
+        order.status = 'confirmed';
+        order.updatedAt = new Date().toISOString();
+        order.estimatedDelivery = new Date(Date.now() + 45 * 60000).toISOString();
+      }
+    },
+    rejectOrder: (state, action) => {
+      const { orderId, reason } = action.payload;
+      const order = state.orders.find(o => o.id === orderId);
+      if (order) {
+        order.cookStatus = 'rejected';
+        order.status = 'cancelled';
+        order.rejectionReason = reason;
+        order.updatedAt = new Date().toISOString();
+      }
+    },
+    startPreparing: (state, action) => {
+      const order = state.orders.find(o => o.id === action.payload);
+      if (order) {
+        order.cookStatus = 'preparing';
+        order.status = 'preparing';
+        order.updatedAt = new Date().toISOString();
+      }
+    },
+    markReady: (state, action) => {
+      const order = state.orders.find(o => o.id === action.payload);
+      if (order) {
+        order.cookStatus = 'ready';
+        order.status = 'ready';
+        order.updatedAt = new Date().toISOString();
+      }
+    },
+    // Delivery agent assignment
+    assignDeliveryAgent: (state, action) => {
+      const { orderId, agentName, agentPhone } = action.payload;
+      const order = state.orders.find(o => o.id === orderId);
+      if (order) {
+        order.deliveryAgent = { name: agentName, phone: agentPhone };
+        order.deliveryStatus = 'assigned';
+        order.updatedAt = new Date().toISOString();
+      }
+    },
+    pickupOrder: (state, action) => {
+      const order = state.orders.find(o => o.id === action.payload);
+      if (order) {
+        order.deliveryStatus = 'picked';
+        order.status = 'out-for-delivery';
+        order.updatedAt = new Date().toISOString();
+      }
+    },
+    deliverOrder: (state, action) => {
+      const order = state.orders.find(o => o.id === action.payload);
+      if (order) {
+        order.deliveryStatus = 'delivered';
+        order.status = 'delivered';
+        order.deliveredAt = new Date().toISOString();
+        order.updatedAt = new Date().toISOString();
+      }
+    },
     updateOrderStatus: (state, action) => {
       const { orderId, status } = action.payload;
       const order = state.orders.find(o => o.id === orderId);
       if (order) {
         order.status = status;
+        order.updatedAt = new Date().toISOString();
       }
       if (state.currentOrder?.id === orderId) {
         state.currentOrder.status = status;
@@ -66,5 +133,15 @@ const orderSlice = createSlice({
   },
 });
 
-export const { updateOrderStatus, clearCurrentOrder } = orderSlice.actions;
+export const { 
+  acceptOrder, 
+  rejectOrder, 
+  startPreparing, 
+  markReady,
+  assignDeliveryAgent,
+  pickupOrder,
+  deliverOrder,
+  updateOrderStatus, 
+  clearCurrentOrder 
+} = orderSlice.actions;
 export default orderSlice.reducer;
