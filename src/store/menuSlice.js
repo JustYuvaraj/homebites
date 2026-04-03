@@ -11,6 +11,9 @@ const menuSlice = createSlice({
   name: 'menu',
   initialState,
   reducers: {
+    setItems: (state, action) => {
+      state.items = action.payload;
+    },
     addMenuItem: (state, action) => {
       const newItem = {
         ...action.payload,
@@ -35,8 +38,14 @@ const menuSlice = createSlice({
         item.isAvailable = !item.isAvailable;
       }
     },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
   },
 });
 
-export const { addMenuItem, updateMenuItem, deleteMenuItem, toggleAvailability } = menuSlice.actions;
+export const { setItems, addMenuItem, updateMenuItem, deleteMenuItem, toggleAvailability, setLoading, setError } = menuSlice.actions;
 export default menuSlice.reducer;

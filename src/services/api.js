@@ -69,6 +69,10 @@ export const customerAPI = {
 
 // ============ COOK API ============
 export const cookAPI = {
+  // Profile
+  getProfile: () => api.get('/cook/profile'),
+  updateDeliveryZone: (data) => api.put('/cook/delivery-zone', data),
+  
   // Menu
   getMyMenu: () => api.get('/cook/menu'),
   addMenuItem: (data) => api.post('/cook/menu', data),
@@ -84,6 +88,14 @@ export const cookAPI = {
   rejectOrder: (id, reason) => api.post(`/cook/orders/${id}/reject`, { reason }),
   startPreparing: (id) => api.post(`/cook/orders/${id}/preparing`),
   markReady: (id) => api.post(`/cook/orders/${id}/ready`),
+};
+
+// ============ COOKS (PUBLIC) API ============
+export const cooksAPI = {
+  getCooksNearLocation: (lat, lng) => api.get(`/cooks/near?lat=${lat}&lng=${lng}`),
+  getMenuNearLocation: (lat, lng) => api.get(`/cooks/menu/near?lat=${lat}&lng=${lng}`),
+  checkDeliveryAvailability: (cookId, lat, lng) => api.get(`/cooks/${cookId}/delivers-to?lat=${lat}&lng=${lng}`),
+  getAllCooks: () => api.get('/cooks'),
 };
 
 // ============ DELIVERY API ============

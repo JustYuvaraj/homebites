@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser, registerUser, clearError } from '../store/authSlice';
-import { Mail, Lock, User, Phone, ChefHat, Truck, Users, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, User, Phone, ChefHat, Truck, Users, Eye, EyeOff, MapPin } from 'lucide-react';
+import DeliveryZoneEditor from '../components/map/DeliveryZoneEditor';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,6 +18,10 @@ const Auth = () => {
     kitchenName: '',
     kitchenAddress: '',
     speciality: '',
+    latitude: null,
+    longitude: null,
+    deliveryRadiusKm: 3,
+    deliveryZone: null,
   });
 
   const dispatch = useDispatch();
@@ -26,6 +32,16 @@ const Auth = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (error) dispatch(clearError());
   };
+
+  const handleZoneChange = useCallback((zoneData) => {
+    setFormData(prev => ({
+      ...prev,
+      latitude: zoneData.latitude,
+      longitude: zoneData.longitude,
+      deliveryRadiusKm: zoneData.deliveryRadiusKm,
+      deliveryZone: zoneData.deliveryZone,
+    }));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +93,7 @@ const Auth = () => {
           {/* Tabs */}
           <div className="flex mb-8 bg-gray-100 rounded-lg p-1">
             <button
-              onClick={() => { setIsLogin(true); dispatch(clearError()); }}
+              onClick={() => { setIsLogin(true); dispatch(clearError()); setShowMap(false); }}
               className={`flex-1 py-2.5 rounded-md font-medium transition-all ${
                 isLogin ? 'bg-white text-orange-500 shadow' : 'text-gray-500'
               }`}
@@ -166,7 +182,7 @@ const Auth = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   required={!isLogin}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-orange-500 transition-colors"
+                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-orange-500"
                 />
               </div>
             )}
@@ -180,7 +196,10 @@ const Auth = () => {
                     <button
                       key={role.value}
                       type="button"
-                      onClick={() => setFormData({ ...formData, role: role.value })}
+                      onClick={() => {
+                        setFormData({ ...formData, role: role.value });
+                        setShowMap(false);
+                      }}
                       className={`p-3 rounded-lg border-2 transition-all flex flex-col items-center gap-1 ${
                         formData.role === role.value
                           ? `border-${role.color}-500 bg-${role.color}-50 text-${role.color}-600`
@@ -230,13 +249,35 @@ const Auth = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-orange-500"
                 />
+                
+                {/* Delivery Zone Button */}
+                <button
+                  type="button"
+                  onClick={() => setShowMap(!showMap)}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-green-400 rounded-lg text-green-600 hover:bg-green-50 transition-colors"
+                >
+                  <MapPin className="h-5 w-5" />
+                  {formData.latitude ? 'Edit Delivery Zone ✓' : 'Set Delivery Zone (Required)'}
+                </button>
+                
+                {/* Delivery Zone Map */}
+                {showMap && (
+                  <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <DeliveryZoneEditor
+                      initialPosition={formData.latitude ? [formData.latitude, formData.longitude] : null}
+                      initialRadius={formData.deliveryRadiusKm || 3}
+                      onZoneChange={handleZoneChange}
+                      height="300px"
+                    />
+                  </div>
+                )}
               </div>
             )}
 
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || (!isLogin && formData.role === 'COOK' && !formData.latitude)}
               className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-lg font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
@@ -251,6 +292,12 @@ const Auth = () => {
                 isLogin ? 'Login' : 'Create Account'
               )}
             </button>
+            
+            {!isLogin && formData.role === 'COOK' && !formData.latitude && (
+              <p className="text-xs text-amber-600 text-center">
+                ⚠️ Please set your delivery zone before registering
+              </p>
+            )}
           </form>
 
           {/* Demo Credentials */}
