@@ -92,10 +92,11 @@ export const cookAPI = {
 
 // ============ COOKS (PUBLIC) API ============
 export const cooksAPI = {
-  getCooksNearLocation: (lat, lng) => api.get(`/cooks/near?lat=${lat}&lng=${lng}`),
-  getMenuNearLocation: (lat, lng) => api.get(`/cooks/menu/near?lat=${lat}&lng=${lng}`),
-  checkDeliveryAvailability: (cookId, lat, lng) => api.get(`/cooks/${cookId}/delivers-to?lat=${lat}&lng=${lng}`),
+  getCooksNearLocation: (lat, lng) => api.get(`/cooks/near?latitude=${lat}&longitude=${lng}`),
+  getMenuNearLocation: (lat, lng) => api.get(`/cooks/menu/near?latitude=${lat}&longitude=${lng}`),
+  checkDeliveryAvailability: (cookId, lat, lng) => api.get(`/cooks/${cookId}/delivers-to?latitude=${lat}&longitude=${lng}`),
   getAllCooks: () => api.get('/cooks'),
+  getCookMenu: (cookId) => api.get(`/cooks/${cookId}/menu`),
 };
 
 // ============ DELIVERY API ============
