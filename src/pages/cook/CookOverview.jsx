@@ -1,10 +1,36 @@
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Package, Clock, CheckCircle, XCircle, TrendingUp, IndianRupee } from 'lucide-react';
+import { Package, Clock, CheckCircle, XCircle, TrendingUp, IndianRupee, MapPin, Settings } from 'lucide-react';
+import DeliveryZoneEditor from '../../components/map/DeliveryZoneEditor';
+import { cookAPI } from '../../services/api';
 
 const CookOverview = () => {
   const { orders } = useSelector((state) => state.orders);
   const { items } = useSelector((state) => state.menu);
+  const [showZoneEditor, setShowZoneEditor] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    // Fetch cook profile
+    cookAPI.getProfile()
+      .then(res => setProfile(res.data))
+      .catch(err => console.error('Error fetching profile:', err));
+  }, []);
+
+  const handleZoneChange = useCallback(async (zoneData) => {
+    if (!zoneData.latitude) return;
+    
+    setSaving(true);
+    try {
+      const res = await cookAPI.updateDeliveryZone(zoneData);
+      setProfile(prev => ({ ...prev, ...res.data }));
+    } catch (err) {
+      console.error('Error updating zone:', err);
+    }
+    setSaving(false);
+  }, []);
 
   const stats = {
     pending: orders.filter(o => o.cookStatus === 'pending').length,
@@ -68,6 +94,46 @@ const CookOverview = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Delivery Zone Card */}
+      <div className="bg-white rounded-xl p-6 shadow-sm mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+              <MapPin className="h-5 w-5 text-green-600" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-800">Delivery Zone</h2>
+              {profile?.deliveryRadiusKm ? (
+                <p className="text-sm text-gray-500">Delivering within {profile.deliveryRadiusKm} km radius</p>
+              ) : (
+                <p className="text-sm text-amber-600">⚠️ Not configured - customers can't find you!</p>
+              )}
+            </div>
+          </div>
+          <button
+            onClick={() => setShowZoneEditor(!showZoneEditor)}
+            className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+          >
+            <Settings className="h-4 w-4" />
+            {profile?.latitude ? 'Edit Zone' : 'Set Up Zone'}
+          </button>
+        </div>
+        
+        {showZoneEditor && (
+          <div className="border-t pt-4">
+            <DeliveryZoneEditor
+              initialPosition={profile?.latitude ? [profile.latitude, profile.longitude] : null}
+              initialRadius={profile?.deliveryRadiusKm || 3}
+              onZoneChange={handleZoneChange}
+              height="350px"
+            />
+            {saving && (
+              <p className="text-sm text-gray-500 mt-2">Saving...</p>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
